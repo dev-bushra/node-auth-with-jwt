@@ -1,5 +1,6 @@
 <%- include('partials/header'); -%>
 
+<!-- SignUp Form -->
 <form action="/signup">
   <h2>Sign up</h2>
   <label for="email">Email</label>
@@ -15,9 +16,12 @@
 
 <script>
   const form = document.querySelector('form');
+
+  // Error div label
   const emailError = document.querySelector('.email.error');
   const passwordError = document.querySelector('.password.error');
 
+  // attach an event lister to the form ('action', () => {fire this fun if the action happens})
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -35,14 +39,19 @@
         body: JSON.stringify({ email, password }),
         headers: {'Content-Type': 'application/json'}
       });
+
       const data = await res.json();
       console.log(data);
+
+      // check if there is an error coming from the backend in the errors obj
       if (data.errors) {
         emailError.textContent = data.errors.email;
         passwordError.textContent = data.errors.password;
       }
+      
+      // check if there is no error from the backend
       if (data.user) {
-        location.assign('/');
+        location.assign('/'); // redirect to home
       }
 
     }

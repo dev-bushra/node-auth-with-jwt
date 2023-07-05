@@ -24,13 +24,14 @@ const requireAuth = (req, res, next) => {
 const checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
+    // check if the token is verify
     jwt.verify(token, 'net ninja secret', async (err, decodedToken) => {
       if (err) {
-        res.locals.user = null;
+        res.locals.user = null; // clear the locals
         next();
       } else {
-        let user = await User.findById(decodedToken.id);
-        res.locals.user = user;
+        let user = await User.findById(decodedToken.id); // found the user data in the db
+        res.locals.user = user; // return the user data on locals
         next();
       }
     });

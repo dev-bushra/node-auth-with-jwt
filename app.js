@@ -21,7 +21,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCr
   .catch((err) => console.log(err));
 
 // routes
-app.get('*', checkUser);
+app.get('*', checkUser); // apply the checkUser middleware on all get requests
 app.get('/', (req, res) => res.render('home'));
-app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'));
+app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies')); // apply requireAuth on this route
 app.use(authRoutes);
