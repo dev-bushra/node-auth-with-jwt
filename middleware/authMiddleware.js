@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// check token
 const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
 
-  // check json web token exists & is verified
+  // check if token exists & verified
   if (token) {
     jwt.verify(token, 'net ninja secret', (err, decodedToken) => {
       if (err) {
@@ -23,14 +24,15 @@ const requireAuth = (req, res, next) => {
 // check current user
 const checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
+
+  // check if token exists & verified
   if (token) {
-    // check if the token is verify
-    jwt.verify(token, 'net ninja secret', async (err, decodedToken) => {
+    jwt.verify(token, "net ninja secret", async (err, decodedToken) => {
       if (err) {
         res.locals.user = null; // clear the locals
         next();
       } else {
-        let user = await User.findById(decodedToken.id); // found the user data in the db
+        let user = await User.findById(decodedToken.id); // found the user data in the db through his token
         res.locals.user = user; // return the user data on locals
         next();
       }

@@ -6,22 +6,22 @@ const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
 const app = express();
 
-// middleware
+// Middleware
 app.use(express.static('public'));
 app.use(express.json());
 app.use(cookieParser());
 
-// view engine
+// EJS Template View Engine
 app.set('view engine', 'ejs');
 
-// database connection
+// Database Connection
 const dbURI = "mongodb+srv://bushra:test123@cluster0.bpllgvr.mongodb.net/";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
-  .then((result) => app.listen(3000))
-  .catch((err) => console.log(err));
+.then((result) => app.listen(3000))
+.catch((err) => console.log(err));
 
-// routes
+// Routes
 app.get('*', checkUser); // apply the checkUser middleware on all get requests
 app.get('/', (req, res) => res.render('home'));
-app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies')); // apply requireAuth on this route
-app.use(authRoutes);
+app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies')); // apply requireAuth middleware on this route
+app.use(authRoutes); // use authRoutes middleware

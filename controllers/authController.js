@@ -1,28 +1,26 @@
 const User = require("../models/User");
 const jwt = require('jsonwebtoken');
 
-// handle errors method
+// Handle Errors Method
 const handleErrors = (err) => {
   console.log(err.message, err.code);
   let errors = { email: '', password: '' };
 
   // 1. LogIn Errors (custom returned error.message)
-
-  // incorrect email
   if (err.message === 'incorrect email') {
-    errors.email = 'That email is not registered';
+    // incorrect email
+    errors.email = "That email is not registered";
   }
-
-  // incorrect password
+  
   if (err.message === 'incorrect password') {
-    errors.password = 'That password is incorrect';
+    // incorrect password
+    errors.password = "That password is incorrect";
   }
 
   // 2. SignUp Errors (mongoDB returned error.message)
-
-  // duplicate email error
   if (err.code === 11000) {
-    errors.email = 'that email is already registered';
+    // duplicate email error
+    errors.email = "that email is already registered";
     return errors;
   }
 
@@ -32,11 +30,10 @@ const handleErrors = (err) => {
       errors[properties.path] = properties.message;
     });
   }
-
   return errors;
 }
 
-// create json web token JWT method
+// Create json web token JWT method
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (id) => {
   return jwt.sign({ id }, 'net ninja secret', {
@@ -45,8 +42,8 @@ const createToken = (id) => {
 };
 
 
+// Controller Actions:
 
-// controller actions
 module.exports.signup_get = (req, res) => {
   res.render('signup');
 }
@@ -93,7 +90,7 @@ module.exports.login_post = async (req, res) => {
 
 }
 
-// logout method
+// Logout Method
 module.exports.logout_get = (req, res) => {
   res.cookie('jwt', '', { maxAge: 1 }); // replace the token with an empty value
   res.redirect('/');
